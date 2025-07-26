@@ -17,13 +17,14 @@ router.post(
 
 router.get(
   "/google",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   async (req: Request, res: Response, next: NextFunction) => {
     const redirect = req.query.redirect || "/";
     passport.authenticate("google", {
       scope: ["profile", "email"],
       state: redirect as string,
-    })(req, res);
+      prompt: "consent",
+    })(req, res, next);
   }
 );
 
