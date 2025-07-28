@@ -1,44 +1,123 @@
-import z from "zod";
+import { z } from "zod";
 import { IsActive, Role } from "./user.interface";
 
+// export const createUserZodSchema = z.object({
+//   name: z.object({
+//     firstName: z
+//       .string()
+//       .min(3, {
+//         message:
+//           "First Name is too short. It should be at least 3 characters long.",
+//       })
+//       .max(50, {
+//         message:
+//           "First Name is too long. It should be no more than 10 characters.",
+//       }),
+//     lastName: z
+//       .string()
+//       .min(3, {
+//         message:
+//           "Last Name is too short. It should be at least 3 characters long.",
+//       })
+//       .max(50, {
+//         message:
+//           "Last Name is too long. It should be no more than 10 characters.",
+//       }),
+//   }),
+
+//   email: z
+//     .email()
+//     .min(5, { message: "Email must be at least 5 characters long." })
+//     .max(100, { message: "Email cannot exceed 100 characters." }),
+//   //1 uppercase, 1 lowercase, 1 special character, 1 digit and minimum total 8 characters
+//   password: z
+//     .string()
+//     .min(8, { message: "Password must be at least 8 characters long." })
+//     .regex(/^(?=.*[A-Z])/, {
+//       message: "Password must contain at least 1 uppercase letter.",
+//     })
+//     .regex(/^(?=.*[!@#$%^&*])/, {
+//       message: "Password must contain at least 1 special character.",
+//     })
+//     .regex(/^(?=.*\d)/, {
+//       message: "Password must contain at least 1 number.",
+//     }),
+//   phone: z
+//     .string({ error: "Phone Number must be a string" })
+//     .regex(/^(\+91|91|0)?[6-9]\d{9}$/, {
+//       message:
+//         "Phone number must be valid for India. Format: +91XXXXXXXXXX, 91XXXXXXXXXX, 0XXXXXXXXXX or XXXXXXXXXX",
+//     })
+//     .optional(),
+
+//   address: z
+//     .string()
+//     .max(200, { message: "Address cannot exceed 200 characters." })
+//     .optional(),
+// });
+
+//----------old version----------------//
 export const createUserZodSchema = z.object({
   name: z
-    .string({ error: "Name must be a string" })
-    .min(3, {
-      message: "Name is too short. It should be at least 3 characters long.",
+    .string({
+      invalid_type_error: "Name must be a string",
+      required_error: "Name is required",
     })
-    .max(50, {
-      message: "Name is too long. It should be no more than 50 characters.",
-    }),
+    .trim()
+    .min(2, {
+      message: "Name is too short. Minimum length should be 2 characters.",
+    })
+    .max(50, { message: "Name is too long." }),
 
   email: z
-    .email({ error: "Invalid email address format." })
+    .string({
+      invalid_type_error: "Email must be a string",
+      required_error: "Email is required",
+    })
+    .trim()
+    .email({ message: "Invalid email address format." })
     .min(5, { message: "Email must be at least 5 characters long." })
     .max(100, { message: "Email cannot exceed 100 characters." }),
-  //1 uppercase, 1 lowercase, 1 special character, 1 digit and minimum total 8 characters
+
   password: z
-    .string({ error: "Password must be string" })
-    .min(8, { message: "Password must be at least 8 characters long." })
-    .regex(/^(?=.*[A-Z])/, {
-      message: "Password must contain at least 1 uppercase letter.",
+    .string({
+      invalid_type_error: "Password must be a string",
+      required_error: "Password is required",
     })
-    .regex(/^(?=.*[!@#$%^&*])/, {
-      message: "Password must contain at least 1 special character.",
+    .trim()
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
     })
-    .regex(/^(?=.*\d)/, {
-      message: "Password must contain at least 1 number.",
+    .regex(/[a-z]/, {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .regex(/[0-9]/, {
+      message: "Password must contain at least one number",
+    })
+    .regex(/[^A-Za-z0-9]/, {
+      message: "Password must contain at least one special character",
     }),
+
   phone: z
-    .string({ error: "Phone Number must be a string" })
-    .regex(/^(\+91|91|0)?[6-9]\d{9}$/, {
+    .string({
+      invalid_type_error: "Phone number must be a string",
+    })
+    .trim()
+    .regex(/^(?:\+8801[3-9]\d{8}|01[3-9]\d{8})$/, {
       message:
-        "Phone number must be valid for India. Format: +91XXXXXXXXXX, 91XXXXXXXXXX, 0XXXXXXXXXX or XXXXXXXXXX",
+        "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
     .optional(),
 
   address: z
-    .string({ error: "Address must be string" })
-    .max(200, { message: "Address cannot exceed 200 characters." })
+    .string({
+      invalid_type_error: "Address must be a string",
+    })
+    .trim()
+    .max(200, {
+      message: "Address cannot exceed 200 characters.",
+    })
     .optional(),
 });
 

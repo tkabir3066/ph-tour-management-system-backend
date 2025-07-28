@@ -11,9 +11,9 @@ const createUser = async (payload: Partial<IUser>) => {
 
   const isUserExist = await User.findOne({ email });
 
-  if (isUserExist) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "User Already Exist", "");
-  }
+  // if (isUserExist) {
+  //   throw new AppError(StatusCodes.BAD_REQUEST, "User Already Exist", "");
+  // }
 
   //hashed password
 
@@ -44,9 +44,9 @@ const updateUser = async (
 ) => {
   const isUserExist = await User.findById(userId);
 
-  if (!isUserExist) {
-    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
-  }
+  // if (!isUserExist) {
+  //   throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  // }
 
   /*
    *email -> can't update
