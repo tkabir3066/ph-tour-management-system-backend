@@ -65,13 +65,10 @@ const updateUser = catchAsync(
 
 const getAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await UserServices.getAllUsers();
-
-    // res.status(StatusCodes.OK).json({
-    //   success: true,
-    //   message: "All Users Retrieved Successfully",
-    //   users,
-    // });
+    const query = req.query;
+    const result = await UserServices.getAllUsers(
+      query as Record<string, string>
+    );
 
     sendResponse(res, {
       success: true,
@@ -82,9 +79,23 @@ const getAllUsers = catchAsync(
     });
   }
 );
+const getSingleUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const result = await UserServices.getSingleUser(id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "User retrieved successfully",
+      data: result.data,
+    });
+  }
+);
 export const UserControllers = {
   createUser,
   getAllUsers,
+  getSingleUser,
   updateUser,
 };
 
