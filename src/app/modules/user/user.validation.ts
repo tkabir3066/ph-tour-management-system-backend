@@ -104,9 +104,9 @@ export const createUserZodSchema = z.object({
       invalid_type_error: "Phone number must be a string",
     })
     .trim()
-    .regex(/^(?:\+8801[3-9]\d{8}|01[3-9]\d{8})$/, {
+    .regex(/^(?:\+91|0)?[6-9]\d{9}$/, {
       message:
-        "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+        "Phone number must be valid for India. Format: +91XXXXXXXXXX, 0XXXXXXXXXX, or XXXXXXXXXX (starting with 6-9)",
     })
     .optional(),
 
