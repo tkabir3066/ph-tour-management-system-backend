@@ -7,6 +7,7 @@ import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import { userSearchableFields } from "./user.constant";
 import { QueryBuilder } from "../../utils/queryBuilder";
+import { deleteImageFromCloudinary } from "../../config/cloudinary.config";
 
 const createUser = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
@@ -89,6 +90,10 @@ const updateUser = async (
     runValidators: true,
   });
 
+  // delete picture from cloudinary before update if exist picture
+  if (payload.picture && isUserExist.picture) {
+    await deleteImageFromCloudinary(isUserExist.picture);
+  }
   return newUpdatedUser;
 };
 

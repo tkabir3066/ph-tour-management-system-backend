@@ -4,12 +4,14 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { checkAuth } from "../../middlewares/checkAuth";
 import { Router } from "express";
 import { Role } from "./user.interface";
+import { multerUpload } from "../../config/multer.config";
 
 const router = Router();
 
 router.post(
   "/register",
   validateRequest(createUserZodSchema),
+  multerUpload.single("file"),
   UserControllers.createUser
 );
 router.get(

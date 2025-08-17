@@ -10,6 +10,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import { verifyToken } from "../../utils/jwt";
 import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
+import { IUser } from "./user.interface";
 
 /* const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -28,7 +29,11 @@ import { JwtPayload } from "jsonwebtoken";
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await UserServices.createUser(req.body);
+    const payload: IUser = {
+      ...req.body,
+      picture: req.file?.path,
+    };
+    const user = await UserServices.createUser(payload);
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.CREATED,
@@ -42,7 +47,11 @@ const updateUser = catchAsync(
     const userId = req.params.id;
     const token = req.headers.authorization;
 
-    const payload = req.body;
+    const payload: IUser = {
+      ...req.body,
+      picture: req.file?.path,
+    };
+    // const payload = req.body;
     /*   const verifiedToken = verifyToken(
       token as string,
       envVars.JWT_ACCESS_SECRET
