@@ -31,6 +31,11 @@ export const checkAuth =
           "User does not exist with this email"
         );
       }
+
+      if (!isUserExist.isVerified) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "User is not verified");
+      }
+
       if (
         isUserExist.isActive === IsActive.BLOCKED ||
         isUserExist.isActive === IsActive.INACTIVE
@@ -40,16 +45,15 @@ export const checkAuth =
           `User is ${isUserExist.isActive}`
         );
       }
-      if (isUserExist.isDeleted === IsActive.BLOCKED) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "User is blocked");
+      if (isUserExist.isDeleted) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "User is deleted");
       }
 
       // authRoles = ["ADMIN", "SUPER_ADMIN"]
       if (!authRoles.includes(verifiedToken.role)) {
         throw new AppError(
           StatusCodes.FORBIDDEN,
-          "You are not authorized to view this route",
-          ""
+          "You are not authorized to view this route"
         );
       }
 
